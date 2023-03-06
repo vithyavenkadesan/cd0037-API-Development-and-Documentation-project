@@ -192,7 +192,8 @@ You will need to provide detailed documentation of your API endpoints including 
                  "id": 2
             }
     }
-    ```
+
+```
 - Returns: Random question object
 
 ```json
@@ -220,7 +221,8 @@ You will need to provide detailed documentation of your API endpoints including 
       "difficulty" : 4 ,
       "category": 1
    }
-    ```
+
+```
 - Returns: Success response with added object id
 
 ```json
@@ -239,7 +241,8 @@ You will need to provide detailed documentation of your API endpoints including 
    {
       "searchTerm" : "team to"
    }
-    ```
+   
+```
 - Returns: QUestions matching given search criteria
 
 ```json
