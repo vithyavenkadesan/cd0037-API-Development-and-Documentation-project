@@ -4,7 +4,9 @@ from flask_sqlalchemy import SQLAlchemy
 import json
 
 database_name = 'trivia'
-database_path = 'postgresql://{}/{}'.format('localhost:5432', database_name)
+DB_USER = os.getenv('DB_USER', 'postgres')
+DB_PASSWORD = os.getenv('DB_PASSWORD', 'abc')
+database_path = 'postgresql://{}:{}@{}/{}'.format(DB_USER, DB_PASSWORD,'localhost:5432', database_name)
 
 db = SQLAlchemy()
 
@@ -17,7 +19,8 @@ def setup_db(app, database_path=database_path):
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
-    db.create_all()
+    with app.app_context():
+        db.create_all()
 
 """
 Question
@@ -57,6 +60,24 @@ class Question(db.Model):
             'category': self.category,
             'difficulty': self.difficulty
             }
+    
+    def searchByQuestionText(search_term):
+        search_results = Question.query.filter(
+            Question.question.ilike(f"%{search_term}%")
+        ).all()
+        questions = [question.format() for question in search_results]
+        return questions  
+    
+    def getQuestionsByCategoryId(category_id):
+        search_results = Question.query.filter(Question.category == category_id).all()
+        questions = [question.format() for question in search_results]
+        return questions  
+    
+    def getRandomQuestions(previous_questions, category_id):
+        search_results = Question.query.filter(Question.category == category_id).all()
+        questions = [question.format() for question in search_results]
+        return questions 
+    
 
 """
 Category
@@ -75,4 +96,16 @@ class Category(db.Model):
         return {
             'id': self.id,
             'type': self.type
-            }
+            }  
+
+    def get_categories():
+        categories = Category.query.order_by(Category.id).all()
+        formatted_categories = {category.id: category.type for category in categories}
+        return formatted_categories   
+    
+    def getCategoryById(category_id):
+        category = Category.query.filter(Category.id == category_id).one_or_none()
+        return category 
+ 
+  
+    

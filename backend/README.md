@@ -73,7 +73,7 @@ You will need to provide detailed documentation of your API endpoints including 
 
 ### Documentation Example
 
-`GET '/api/v1.0/categories'`
+`GET '/categories'`
 
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
 - Request Arguments: None
@@ -81,13 +81,183 @@ You will need to provide detailed documentation of your API endpoints including 
 
 ```json
 {
-  "1": "Science",
-  "2": "Art",
-  "3": "Geography",
-  "4": "History",
-  "5": "Entertainment",
-  "6": "Sports"
+    "categories": {
+        "1": "Science",
+        "2": "Art",
+        "3": "Geography",
+        "4": "History",
+        "5": "Entertainment",
+        "6": "Sports"
+    },
+    "success": true
 }
+
+
+```
+
+
+`GET '/questions'`
+
+- Fetches a paginated set of questions, a total number of questions, all categories and current category.
+- Request Arguments: page integer value
+- Returns: An object with 10 paginated questions, total questions, object including all categories, and current category string
+
+```json
+{
+    "categories": {
+        "1": "Science",
+        "2": "Art",
+        "3": "Geography",
+        "4": "History",
+        "5": "Entertainment",
+        "6": "Sports"
+    },
+    "currentCategory": "Science",
+    "questions": [
+        {
+            "answer": "Apollo 13",
+            "category": 5,
+            "difficulty": 4,
+            "id": 2,
+            "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+        },
+        {
+            "answer": "The Palace of Versailles",
+            "category": 3,
+            "difficulty": 3,
+            "id": 14,
+            "question": "In which royal palace would you find the Hall of Mirrors?"
+        }
+    ],
+    "success": true,
+    "totalQuestions": 10
+}
+
+```
+
+`GET '/categories/${category_id}/questions'`
+
+- Fetches question for category id privided.
+- Request Arguments: category_id integer value
+- Returns: An object with questions for the specified category, total questions, and current category string
+
+```json
+{
+    "currentCategory": "History",
+    "questions": [
+        {
+            "answer": "Maya Angelou",
+            "category": 4,
+            "difficulty": 2,
+            "id": 5,
+            "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+        },
+        {
+            "answer": "Muhammad Ali",
+            "category": 4,
+            "difficulty": 1,
+            "id": 9,
+            "question": "What boxer's original name is Cassius Clay?"
+        }
+    ],
+    "success": true,
+    "totalQuestions": 4
+}
+
+```
+
+`DELETE '/questions/${question_id}'`
+
+- Deletes a question using the id of the question.
+- Request Arguments: question_id integer value
+- Returns: Success code along with deleted id
+
+```json
+{
+    "deleted": 25,
+    "success": true
+}
+
+```
+
+`POST '/quizzes'`
+
+- Fetch next random question for category or without category provided. If previous questions has been provided, next random question will be chosen by excluding that
+- Request Body:
+```json
+    {
+     "previous_questions": [1,5]
+     "quiz_category": {
+                "type": "History", 
+                 "id": 2
+            }
+    }
+    ```
+- Returns: Random question object
+
+```json
+{
+    "question": {
+        "answer": "One",
+        "category": 2,
+        "difficulty": 4,
+        "id": 18,
+        "question": "How many paintings did Van Gogh sell in his lifetime?"
+    },
+    "success": true
+}
+
+```
+
+`POST '/questions'`
+
+- Add new question to specified category
+- Request Body:
+```json
+   {
+      "question" : "What is formula for copper",
+      "answer": "CU",
+      "difficulty" : 4 ,
+      "category": 1
+   }
+    ```
+- Returns: Success response with added object id
+
+```json
+  {
+    "created": 44,
+    "success": true
+  }
+
+```
+
+`POST '/questions/search'`
+
+- Fetch the questions which has provided term on it
+- Request Body:
+```json
+   {
+      "searchTerm" : "team to"
+   }
+    ```
+- Returns: QUestions matching given search criteria
+
+```json
+  {
+    "questions": [
+        {
+            "answer": "Brazil",
+            "category": 6,
+            "difficulty": 3,
+            "id": 10,
+            "question": "Which is the only team to play in every soccer World Cup tournament?"
+        }
+    ],
+    "success": true,
+    "totalQuestions": 1
+}
+
+
 ```
 
 ## Testing
